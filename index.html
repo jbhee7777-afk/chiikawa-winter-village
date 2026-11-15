@@ -245,6 +245,15 @@ button:not(:disabled){opacity:1}.btn,.choices button,.snd-panel button{color:#4c
 @keyframes island-note{50%{transform:translate(7px,-9px) rotate(8deg);opacity:.55}}@keyframes island-spark{to{transform:scale(1.25) rotate(18deg)}}
 @media(max-width:600px){.island-story{height:270px}.island-cave-mouth{transform:scale(.84);transform-origin:50% 100%;top:25px}.island-party{width:43%;bottom:42px}.island-cliff{bottom:49px}}
 
+/* Release candidate loop */
+#release-ribbon{position:fixed;z-index:6;top:112px;left:50%;transform:translateX(-50%);min-width:280px;max-width:calc(100vw - 370px);display:flex;align-items:center;gap:10px;padding:8px 13px;border:2px solid #70584d;border-radius:18px;background:#fff9e9eb;box-shadow:0 4px 0 #6f564d44;color:#59433b;text-align:left;backdrop-filter:blur(7px)}
+#release-ribbon>span{font-size:25px}#release-ribbon div{min-width:0;flex:1}#release-ribbon small,#release-ribbon b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#release-ribbon small{font:11px var(--font-body);color:#917363}#release-ribbon b{font-size:14px}#release-ribbon>i{font:11px var(--font-display);padding:4px 7px;border-radius:10px;background:#efd6ad}#release-ribbon.complete{background:#e8f3d9eb;animation:release-glow 1.6s infinite alternate}
+.release-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:5px 2px 14px}.release-head h2{margin:3px 0}.release-head p,.release-head small{margin:0;color:#906e5c}.release-level{min-width:170px;padding:11px;border:2px solid #b69b78;border-radius:18px;background:#fff6d9;text-align:center}.release-level b{font-size:20px}.release-level span{display:block;height:10px;margin:7px 0;border:1px solid #8b725f;border-radius:10px;background:#e6d9bd;overflow:hidden}.release-level i{display:block;height:100%;background:linear-gradient(90deg,#f2a7b6,#f2ce77)}.release-level small{font-size:10px}
+.release-route{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:14px;background:#eee6d8;color:#765f54;font-size:12px}.release-route i{color:#c08c78;font-size:18px}.release-tasks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.release-task{display:flex;align-items:center;gap:10px;min-height:79px;padding:10px;border:2px solid #c0a890;border-radius:17px;background:#fffaf0;text-align:left}.release-task em{font-style:normal;font-size:29px}.release-task span{flex:1;min-width:0}.release-task b,.release-task small{display:block}.release-task b{font-size:15px}.release-task small{margin-top:3px;color:#90786a;font:11px var(--font-body)}.release-task strong{padding:5px 7px;border-radius:10px;background:#f1e6cf;font-size:11px}.release-task.done{border-color:#8da874;background:#edf5df}.release-task.done strong{background:#cfe2b6}.release-reward{display:flex;align-items:center;gap:12px;padding:12px 15px;border:2px dashed #b9a58e;border-radius:17px;background:#eee7da;color:#81776e}.release-reward>span{font-size:30px}.release-reward b,.release-reward small{display:block}.release-reward.earned{border-style:solid;border-color:#d49b45;background:#fff0b9;color:#654a2e;box-shadow:0 0 18px #f4cd7277}
+.day-recap{text-align:center}.recap-moon{width:88px;height:88px;margin:2px auto 8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8cf,#f2cd78);font-size:60px;line-height:83px;color:#755a78;box-shadow:0 0 30px #f4d88d}.day-recap>small{letter-spacing:.12em;color:#9a7568}.day-recap h2{margin:4px 0}.day-recap>p{line-height:1.6}.recap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:15px 0}.recap-stats span{padding:12px 6px;border:2px solid #c1aa94;border-radius:16px;background:#fff9eb}.recap-stats b,.recap-stats small{display:block}.recap-stats b{font-size:25px;color:#a35f70}.recap-stats small{font-size:11px;color:#8d7467}
+@keyframes release-glow{to{box-shadow:0 4px 0 #6f564d44,0 0 20px #f4d76a}}
+@media(max-width:760px){#release-ribbon{top:auto;bottom:82px;min-width:245px;max-width:calc(100vw - 24px)}.release-head{align-items:flex-start}.release-level{min-width:120px}.release-route{font-size:10px;gap:4px}.release-tasks{grid-template-columns:1fr}.release-task{min-height:66px}.release-task em{font-size:25px}}
+
 </style>
 
 <canvas id="world" aria-label="작은 숲 마을"></canvas>
@@ -325,8 +334,8 @@ const Snd=(()=>{
     const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
     try{ac=new C();}catch(e){ac=null;return;}
     master=ac.createDynamicsCompressor();master.connect(ac.destination);
-    sfx=gainNode(pref.sfx?.85:0,master);bgm=gainNode(pref.bgm?.3:0,master);
-    echo=ac.createDelay(1);echo.delayTime.value=.29;const fb=gainNode(.3),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2300;
+    sfx=gainNode(pref.sfx?.68:0,master);bgm=gainNode(pref.bgm?.085:0,master);
+    echo=ac.createDelay(1);echo.delayTime.value=.34;const fb=gainNode(.12),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2300;
     echo.connect(lp);lp.connect(fb);fb.connect(echo);lp.connect(bgm);
     noiseBuf=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
     const rs=ac.createBufferSource();rs.buffer=noiseBuf;rs.loop=true;const rf=ac.createBiquadFilter();rf.type='bandpass';rf.frequency.value=1500;rf.Q.value=.5;rainG=gainNode(0,sfx);rs.connect(rf);rf.connect(rainG);rs.start();
@@ -362,7 +371,7 @@ const Snd=(()=>{
     nibble:()=>{tone(760,.05,{type:'triangle',v:.09,to:620});},
     hook:()=>{noise(.12,{f:900,to:2400,v:.14});tone(220,.16,{to:520,type:'triangle',v:.15});},
     reel:(p=0)=>{noise(.018,{f:2600+p*1500,q:3,v:.06});tone(300+p*420,.022,{type:'square',v:.018});},
-    creak:()=>tone(190+Math.random()*60,.1,{type:'sawtooth',v:.022,to:150}),
+    creak:()=>tone(190+Math.random()*60,.1,{type:'sawtooth',v:.009,to:150}),
     bite:()=>{tone(990,.08,{type:'triangle',v:.13});tone(1320,.1,{type:'triangle',when:.09,v:.13});},
     splash:()=>{noise(.34,{f:1400,to:420,v:.2,type:'lowpass'});for(let i=0;i<4;i++)tone(600+Math.random()*500,.05,{when:.06+i*.05,to:1200,v:.04});},
     catch:()=>seq([72,76,79,84,88],.075,{v:.12,d:.26}),
@@ -384,36 +393,33 @@ const Snd=(()=>{
     emo_zzz:()=>tone(330,.42,{to:215,v:.07}),
     emo_puff:()=>{tone(200,.08,{to:330,v:.1,type:'triangle'});tone(250,.12,{when:.09,to:150,v:.09,type:'triangle'});},
   };
-  // music box loop: a slow pluck arpeggio with a wandering pentatonic melody
+  // quiet ambient loop: soft low chords with sparse warm notes
   const DAY=[[60,64,67,72],[57,64,69,72],[53,60,65,69],[55,62,67,71],[53,60,69,72],[55,62,67,74],[52,59,64,67],[55,59,62,67]];
   const NIGHT=[[57,64,69,72],[53,60,65,69],[48,55,64,67],[55,59,62,67]];
-  const PENTA=[72,74,76,79,81,84,86,88];
   function pluck(n,when,v){const f=mtof(n),t=when,o=ac.createOscillator(),o2=ac.createOscillator(),e=ac.createGain();o.type='triangle';o2.type='sine';o.frequency.value=f;o2.frequency.value=f*2;
     e.gain.setValueAtTime(.0001,t);e.gain.exponentialRampToValueAtTime(v,t+.008);e.gain.exponentialRampToValueAtTime(.0001,t+1.25);const m=gainNode(.22);o.connect(e);o2.connect(m);m.connect(e);e.connect(bgm);e.connect(echo);o.start(t);o2.start(t);o.stop(t+1.3);o2.stop(t+1.3);}
   function scheduleBar(t0){
-    const P=night?NIGHT:DAY,ch=P[bar%P.length],eighth=60/(night?62:86)/2;
-    if(bar%9!==8&&pref.bgm){
-      const b=ac.createOscillator(),e=ac.createGain();b.frequency.value=mtof(ch[0]-12);e.gain.setValueAtTime(.0001,t0);e.gain.exponentialRampToValueAtTime(.2,t0+.03);e.gain.exponentialRampToValueAtTime(.0001,t0+eighth*7);b.connect(e);e.connect(bgm);b.start(t0);b.stop(t0+eighth*7.2);
-      const pat=night?[0,null,2,null,1,null,3,null]:[0,2,1,3,2,null,1,3];
-      pat.forEach((k,i)=>{if(k===null||Math.random()<.14)return;pluck(ch[k]+12*(night?0:1)-(night?0:12),t0+i*eighth,night?.11:.13);});
-      const count=night?1:1+Math.floor(Math.random()*3);
-      for(let i=0;i<count;i++){let idx=PENTA.indexOf(melody);idx=clamp(idx+Math.floor(Math.random()*5)-2,0,PENTA.length-1);melody=PENTA[idx];pluck(melody,t0+eighth*(i*2+(night?2:Math.floor(Math.random()*2))),night?.1:.14);}
+    const P=night?NIGHT:DAY,ch=P[bar%P.length],beat=60/(night?52:58);
+    if(pref.bgm){
+      const root=ac.createOscillator(),air=ac.createOscillator(),e=ac.createGain(),f=ac.createBiquadFilter();root.type='sine';air.type='sine';root.frequency.value=mtof(ch[0]-12);air.frequency.value=mtof(ch[0]);f.type='lowpass';f.frequency.value=720;
+      e.gain.setValueAtTime(.0001,t0);e.gain.exponentialRampToValueAtTime(night?.035:.045,t0+.45);e.gain.exponentialRampToValueAtTime(.0001,t0+beat*3.8);root.connect(f);air.connect(f);f.connect(e);e.connect(bgm);root.start(t0);air.start(t0);root.stop(t0+beat*4);air.stop(t0+beat*4);
+      if(bar%2===0){pluck(ch[1],t0+beat*.5,night?.025:.032);pluck(ch[2],t0+beat*2.5,night?.022:.028);}
     }
-    bar++;return eighth*8;
+    bar++;return beat*4;
   }
   function chirps(){
     const now=ac.currentTime;if(now<birdAt)return;
-    if(night){birdAt=now+2.5+Math.random()*3;for(let i=0;i<3;i++)tone(4300,.05,{when:i*.09,v:.008});return;}
-    birdAt=now+5+Math.random()*9;if(rainy)return;const n=2+Math.floor(Math.random()*3),f=2600+Math.random()*1500;for(let i=0;i<n;i++)tone(f,.08,{when:i*.13,to:f*1.28,v:.022});
+    if(night){birdAt=now+2.5+Math.random()*3;for(let i=0;i<3;i++)tone(4300,.05,{when:i*.09,v:.004});return;}
+    birdAt=now+5+Math.random()*9;if(rainy)return;const n=2+Math.floor(Math.random()*3),f=2600+Math.random()*1500;for(let i=0;i<n;i++)tone(f,.08,{when:i*.13,to:f*1.28,v:.009});
   }
   function tick(){if(!ac||ac.state!=='running')return;while(nextBar<ac.currentTime+.5)nextBar+=scheduleBar(nextBar);chirps();}
   let ambG=null,ambF=null,lfo=null,ambKind=null,gullAt=0;
   function sceneAmb(kind){if(!ac)return;if(!ambG){const n=ac.createBufferSource();n.buffer=noiseBuf;n.loop=true;ambF=ac.createBiquadFilter();ambF.type='lowpass';ambG=gainNode(0,sfx);const sw=gainNode(1,ambG);n.connect(ambF);ambF.connect(sw);lfo=ac.createOscillator();lfo.frequency.value=.13;const d=gainNode(.5);lfo.connect(d);d.connect(sw.gain);n.start();lfo.start();}
-    ambKind=kind;const t=ac.currentTime;ambF.frequency.setTargetAtTime(kind==='sea'?760:kind==='wind'?420:300,t,.3);lfo.frequency.setTargetAtTime(kind==='sea'?.13:.07,t,.3);ambG.gain.setTargetAtTime(kind?(kind==='sea'?.34:.16):0,t,.6);bgm.gain.setTargetAtTime(pref.bgm?(kind?.14:.3):0,t,.8);}
+    ambKind=kind;const t=ac.currentTime;ambF.frequency.setTargetAtTime(kind==='sea'?760:kind==='wind'?420:300,t,.3);lfo.frequency.setTargetAtTime(kind==='sea'?.13:.07,t,.3);ambG.gain.setTargetAtTime(kind?(kind==='sea'?.18:.08):0,t,.6);bgm.gain.setTargetAtTime(pref.bgm?(kind?.055:.085):0,t,.8);}
   return{scene:sceneAmb,init,
     play(name,arg){if(!ac||!pref.sfx||ac.state!=='running')return;const f=FX[name];if(f)f(arg);},
     mood(n,r){night=n;if(r!==rainy){rainy=r;}if(ac)rainG.gain.setTargetAtTime(r?.05:0,ac.currentTime,.6);},
-    toggle(k){pref[k]=!pref[k];try{localStorage.setItem(KEY,JSON.stringify(pref));}catch(e){}if(ac){(k==='sfx'?sfx:bgm).gain.setTargetAtTime(pref[k]?(k==='sfx'?.85:.3):0,ac.currentTime,.05);}return pref[k];},
+    toggle(k){pref[k]=!pref[k];try{localStorage.setItem(KEY,JSON.stringify(pref));}catch(e){}if(ac){(k==='sfx'?sfx:bgm).gain.setTargetAtTime(pref[k]?(k==='sfx'?.68:.085):0,ac.currentTime,.05);}return pref[k];},
     pref,names:Object.keys(FX),node:()=>master,ctx:()=>ac,
     sleep(on){if(ac){on?ac.suspend():ac.resume();}}};
 })();
@@ -2437,7 +2443,7 @@ const MEALS=[{name:'버섯 라멘',cost:{shrooms:1,riceball:1},row:0},{name:'과
 const mealCost=m=>Object.entries(m.cost).map(([id,n])=>`${ITEMS[id].name} ${state.bag[id]||0}/${n}`).join(' · ');
 function openHouse(kind='chi-house',guests){normalizeChi();const cave=kind==='cave';let group=[...new Set(guests||[CHI.findIndex(c=>c[0]===state.look.chi),0,1,2])].filter(i=>i>=0),served=false,selected=0,busy=false,alive=true,timer=null,counts=[],finished=false,chat=0;const sh=openModal(`<div class="house-heading"><small>${cave?'동굴에서 보내는 하루':'작고 포근한 하루'}</small><h2>${cave?'하치와레의 동굴집':'치이카와의 집'}</h2><p class="sub">${cave?'돗자리와 상자 탁자에 둘러앉아 따뜻한 밥을 나눠요.':'분홍 낮은 탁자에 친구들을 불러 오늘의 밥을 나눠요.'}</p></div><div class="house-tabs"><button class="btn ${cave?'':'pink'}" data-home="chi-house">치이카와의 집</button><button class="btn ${cave?'pink':''}" data-home="cave">하치와레의 동굴집</button><button class="btn" id="house-lamp">저녁 풍경</button></div><div class="dining-room room-v10 ${cave?'room-cave':'room-house'}" id="dining-room">${roomScenery(cave)}<div class="room-nameplate">${cave?'하치와레의 동굴집':'치이카와의 집'}</div><div class="dining-table"><div id="dining-bowls"></div></div><div id="dining-friends"></div></div><p class="chi-line" id="meal-caption" role="status">친구를 초대하고 오늘의 밥상을 골라요.</p><div class="house-guests" id="house-guests"></div><div class="house-meals">${MEALS.map((m,i)=>`<button class="meal-choice ${i===0?'selected':''}" data-meal="${i}" aria-pressed="${i===0}"><img src="${CK.food[i][0]}" alt=""><b>${m.name}</b><small>${mealCost(m)}</small></button>`).join('')}</div><div class="chi-actions"><button class="btn pink" id="serve-meal">재료로 밥상 차리기</button><button class="btn" id="meal-chat">도란도란 이야기</button><button class="btn ghost" data-close>마을로 나가기</button></div>`,{onClose:()=>{alive=false;clearTimeout(timer);}});
  function draw(){const total=Math.ceil(group.length/2),ys=group.map((_,j)=>total<=2?43+Math.floor(j/2)*27:34+Math.floor(j/2)*18);$('#house-guests').innerHTML='<span>초대할 친구</span>'+CHI.map(([id,n],i)=>`<button class="btn ${group.includes(i)?'pink':''}" data-invite="${i}" aria-pressed="${group.includes(i)}" ${served?'disabled':''}>${n}</button>`).join('');$('#dining-friends').innerHTML=group.map((i,j)=>`<button class="dining-friend ${j%2?'right':'left'}" style="--seat-y:${ys[j]}%" data-diner="${j}" aria-label="${CHI[i][1]} 한입 먹기"><img src="${CK.seats[i]}" alt="${CHI[i][1]}"><span>${CHI[i][1]}${served?' · '+counts[j]+'/3':''}</span></button>`).join('');$('#dining-bowls').innerHTML=served?group.map((_,j)=>`<div class="dining-bowl ${j%2?'right':'left'}" style="top:${(ys[j]-30)*1.48}%" data-bowl="${j}"><img src="${CK.food[selected][counts[j]]}" alt="${MEALS[selected].name}"></div>`).join(''):'';sh.querySelectorAll('[data-invite]').forEach(b=>b.onclick=()=>{if(served)return;const i=+b.dataset.invite;if(group.includes(i)){if(group.length===1)return;group=group.filter(v=>v!==i);}else group.push(i);draw();});sh.querySelectorAll('[data-diner]').forEach(b=>b.onclick=()=>bite(+b.dataset.diner));}
- function bite(j){if(!served){$('#meal-caption').textContent='먼저 밥상을 차려요.';return;}if(busy||finished||counts[j]>=3)return;busy=true;const actor=sh.querySelector(`[data-diner="${j}"]`);actor.classList.add('taking-bite');Snd.play('eat');$('#meal-caption').textContent=CHI[group[j]][1]+': '+(group[j]===2?'야하! (오물오물)':group[j]===0||group[j]===7?'…! (맛있다는 듯 고개를 끄덕인다.)':group[j]===4?'…하아.':'따뜻하다! 잘 먹겠습니다.');timer=setTimeout(()=>{if(!alive)return;counts[j]++;busy=false;actor.classList.remove('taking-bite');actor.querySelector('span').textContent=CHI[group[j]][1]+' · '+(counts[j]===3?'잘 먹었어!':counts[j]+'/3');sh.querySelector(`[data-bowl="${j}"] img`).src=CK.food[selected][counts[j]];finished=counts.every(n=>n===3);if(finished){state.ckMeals[selected]=(state.ckMeals[selected]||0)+1;addNeeds({hunger:35,mood:15,energy:10});for(const n of allNpcs)if(group.some(i=>CHI[i][0]===n.look.chi)&&n.town===town)friendUp(n.id,2);save();updateHud(true);$('#meal-caption').textContent='다 같이 잘 먹었습니다! 배부름 +35 · 기분 +15';$('#serve-meal').textContent='한 번 더 차리기';}} ,600);}
+ function bite(j){if(!served){$('#meal-caption').textContent='먼저 밥상을 차려요.';return;}if(busy||finished||counts[j]>=3)return;busy=true;const actor=sh.querySelector(`[data-diner="${j}"]`);actor.classList.add('taking-bite');Snd.play('eat');$('#meal-caption').textContent=CHI[group[j]][1]+': '+(group[j]===2?'야하! (오물오물)':group[j]===0||group[j]===7?'…! (맛있다는 듯 고개를 끄덕인다.)':group[j]===4?'…하아.':'따뜻하다! 잘 먹겠습니다.');timer=setTimeout(()=>{if(!alive)return;counts[j]++;busy=false;actor.classList.remove('taking-bite');actor.querySelector('span').textContent=CHI[group[j]][1]+' · '+(counts[j]===3?'잘 먹었어!':counts[j]+'/3');sh.querySelector(`[data-bowl="${j}"] img`).src=CK.food[selected][counts[j]];finished=counts.every(n=>n===3);if(finished){state.ckMeals[selected]=(state.ckMeals[selected]||0)+1;state.daily.meal=true;if(typeof releaseProgress==='function')releaseProgress('meal');addNeeds({hunger:35,mood:15,energy:10});for(const n of allNpcs)if(group.some(i=>CHI[i][0]===n.look.chi)&&n.town===town)friendUp(n.id,2);save();updateHud(true);$('#meal-caption').textContent='다 같이 잘 먹었습니다! 배부름 +35 · 기분 +15';$('#serve-meal').textContent='한 번 더 차리기';}} ,600);}
  $('#serve-meal').onclick=()=>{if(finished){openHouse(kind,group);return;}if(!served){const m=MEALS[selected],missing=Object.entries(m.cost).filter(([k,n])=>(state.bag[k]||0)<n);if(missing.length){$('#meal-caption').textContent='필요한 재료: '+missing.map(([k,n])=>ITEMS[k].name+' '+(n-(state.bag[k]||0))+'개')+'. 나무와 덤불을 뒤지거나 잡화점에서 구해 와요.';return;}for(const[k,n]of Object.entries(m.cost))state.bag[k]-=n;served=true;counts=group.map(()=>0);save();draw();sh.querySelectorAll('[data-meal],[data-home]').forEach(b=>b.disabled=true);$('#serve-meal').textContent='함께 한입 먹기';$('#meal-caption').textContent='각자 앞에 한 그릇씩. 친구를 누르면 한입 먹어요.';return;}const j=counts.findIndex(n=>n<3);if(j>=0)bite(j);};
  sh.querySelectorAll('[data-meal]').forEach(b=>b.onclick=()=>{if(served)return;selected=+b.dataset.meal;sh.querySelectorAll('[data-meal]').forEach(x=>{x.classList.toggle('selected',+x.dataset.meal===selected);x.setAttribute('aria-pressed',String(+x.dataset.meal===selected));});});
  $('#meal-chat').onclick=()=>{const i=group[chat++%group.length],lines=CHI_LINES[CHI[i][0]];$('#meal-caption').textContent=CHI[i][1]+': '+lines[Math.floor(chat/group.length)%lines.length];Snd.play('talk',600);};$('#house-lamp').onclick=()=>{$('#dining-room').classList.toggle('evening');$('#house-lamp').textContent=$('#dining-room').classList.contains('evening')?'낮 풍경':'저녁 풍경';};sh.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>openHouse(b.dataset.home,group));draw();
@@ -2446,7 +2452,7 @@ const ORN_NAMES=['눈꽃 별','리본','작은 방울','소원 주머니','행�
 const ORN_RECIPES=[{}, {apple:2},{pinecone:2},{feather:2},{shrooms:2},{shiny:1},{peach:2},{bouquet:1},{orange:2,pinecone:1},{clover4:1},{honey:1},{carp:1,pinecone:2}];
 function openChiTree(){normalizeChi();let selected=state.ckTree.owned[0]??0;const sh=openModal('<h2>우리들의 반짝 트리</h2><p class="sub">숲에서 모은 재료로 장식을 만들어요. 장식을 고른 뒤 트리의 자리를 눌러 달아요.</p><div class="tree-layout"><div class="tree-stage" id="tree-stage"><img class="tree-base" src="'+CK.props.tree+'" alt="우리들의 트리"><div id="tree-slots"></div></div><div class="tree-workbench" id="tree-workbench"></div></div><p class="chi-line" id="tree-message" role="status"></p><div class="chi-actions"><button class="btn" id="tree-remove">선택한 장식 내려놓기</button><button class="btn ghost" data-close>산책 계속하기</button></div>');
  const coords=[[50,18],[39,32],[61,32],[30,46],[50,46],[70,46],[23,61],[41,61],[59,61],[77,61],[35,76],[65,76]];
- function draw(){const s=state.ckTree;$('#tree-slots').innerHTML=coords.map(([x,y],i)=>`<button class="tree-slot ${s.slots[i]!==null?'filled':''}" data-slot="${i}" style="left:${x}%;top:${y}%" aria-label="${i+1}번째 장식 자리">${s.slots[i]!==null?`<img src="${CK.ornaments[s.slots[i]]}" alt="${ORN_NAMES[s.slots[i]]}">`:'+'}</button>`).join('');$('#tree-workbench').innerHTML='<h3>장식 '+s.slots.filter(i=>i!==null).length+' / 12</h3>'+ORN_NAMES.map((n,i)=>`<button class="orn-recipe ${selected===i?'selected':''}" data-orn="${i}" aria-pressed="${selected===i}"><img src="${CK.ornaments[i]}" alt=""><span><b>${n}</b><small>${s.owned.includes(i)?(s.slots.includes(i)?'트리에 달려 있어요':'골라서 달기'):Object.entries(ORN_RECIPES[i]).map(([k,v])=>ITEMS[k].name+' '+(state.bag[k]||0)+'/'+v).join(' · ')}</small></span><strong>${s.owned.includes(i)?'선택':'만들기'}</strong></button>`).join('');sh.querySelectorAll('[data-orn]').forEach(b=>b.onclick=()=>{const i=+b.dataset.orn;if(!s.owned.includes(i)){const r=ORN_RECIPES[i];if(Object.entries(r).some(([k,n])=>(state.bag[k]||0)<n)){$('#tree-message').textContent='재료를 더 모아 와요: '+Object.entries(r).map(([k,n])=>ITEMS[k].name+' '+n+'개').join(', ');return;}for(const[k,n]of Object.entries(r))state.bag[k]-=n;s.owned.push(i);Snd.play('item');save();}selected=i;draw();$('#tree-message').textContent=ORN_NAMES[i]+' 선택! 트리의 원하는 자리를 눌러요.';});sh.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const i=+b.dataset.slot;if(!s.owned.includes(selected))return;const previous=s.slots.indexOf(selected);if(previous>=0)s.slots[previous]=null;s.slots[i]=selected;Snd.play('goal');save();draw();$('#tree-message').textContent=s.slots.every(v=>v!==null)?'친구들의 추억으로 트리가 반짝반짝!':ORN_NAMES[selected]+'을 달았어요!';});}
+ function draw(){const s=state.ckTree;$('#tree-slots').innerHTML=coords.map(([x,y],i)=>`<button class="tree-slot ${s.slots[i]!==null?'filled':''}" data-slot="${i}" style="left:${x}%;top:${y}%" aria-label="${i+1}번째 장식 자리">${s.slots[i]!==null?`<img src="${CK.ornaments[s.slots[i]]}" alt="${ORN_NAMES[s.slots[i]]}">`:'+'}</button>`).join('');$('#tree-workbench').innerHTML='<h3>장식 '+s.slots.filter(i=>i!==null).length+' / 12</h3>'+ORN_NAMES.map((n,i)=>`<button class="orn-recipe ${selected===i?'selected':''}" data-orn="${i}" aria-pressed="${selected===i}"><img src="${CK.ornaments[i]}" alt=""><span><b>${n}</b><small>${s.owned.includes(i)?(s.slots.includes(i)?'트리에 달려 있어요':'골라서 달기'):Object.entries(ORN_RECIPES[i]).map(([k,v])=>ITEMS[k].name+' '+(state.bag[k]||0)+'/'+v).join(' · ')}</small></span><strong>${s.owned.includes(i)?'선택':'만들기'}</strong></button>`).join('');sh.querySelectorAll('[data-orn]').forEach(b=>b.onclick=()=>{const i=+b.dataset.orn;if(!s.owned.includes(i)){const r=ORN_RECIPES[i];if(Object.entries(r).some(([k,n])=>(state.bag[k]||0)<n)){$('#tree-message').textContent='재료를 더 모아 와요: '+Object.entries(r).map(([k,n])=>ITEMS[k].name+' '+n+'개').join(', ');return;}for(const[k,n]of Object.entries(r))state.bag[k]-=n;s.owned.push(i);Snd.play('item');save();}selected=i;draw();$('#tree-message').textContent=ORN_NAMES[i]+' 선택! 트리의 원하는 자리를 눌러요.';});sh.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const i=+b.dataset.slot;if(!s.owned.includes(selected))return;const previous=s.slots.indexOf(selected);if(previous>=0)s.slots[previous]=null;s.slots[i]=selected;state.daily.decorated=true;if(typeof releaseProgress==='function')releaseProgress('decorate');Snd.play('goal');save();draw();$('#tree-message').textContent=s.slots.every(v=>v!==null)?'친구들의 추억으로 트리가 반짝반짝!':ORN_NAMES[selected]+'을 달았어요!';});}
  $('#tree-remove').onclick=()=>{const i=state.ckTree.slots.indexOf(selected);if(i<0){$('#tree-message').textContent='아직 트리에 달지 않은 장식이에요.';return;}state.ckTree.slots[i]=null;save();draw();$('#tree-message').textContent='장식함에 다시 넣었어요.';};draw();$('#tree-message').textContent='첫 눈꽃 별은 선물이에요. 마음에 드는 자리에 달아 봐요.';
 }
 // Useful direct entries; walking interactions remain the primary world controls.
@@ -2504,6 +2510,52 @@ ITEMS.ckramen={name:'따뜻한 라멘',price:35,sell:12,eat:{hunger:40,energy:6,
 openCafe=()=>openMenu('라멘 가게 로','시사: “어서 오세요! 따뜻할 때 드세요.”',['ckramen','riceball']);
 BLD_ENTER.snack=['#fff0cb',()=>openMenu('섬 라멘 노점','탐험을 마치고 먹는 따뜻한 한 그릇.',['ckramen','dango','icecream'])];
 const workGoal=GOALS.find(g=>g.id==='work');if(workGoal)workGoal.text='풀뽑기 또는 토벌 마치기';
+
+/* Release candidate daily loop and progression */
+const RELEASE_TASKS=[
+ {id:'gather',icon:'🍎',title:'숲의 선물 모으기',need:2,tip:'나무를 흔들거나 낚시를 해요.'},
+ {id:'talk',icon:'💬',title:'친구와 이야기하기',need:1,tip:'마을 친구에게 다가가 말을 걸어요.'},
+ {id:'work',icon:'🛡️',title:'오늘의 일거리',need:1,tip:'풀뽑기나 토벌 의뢰를 마쳐요.'},
+ {id:'meal',icon:'🍲',title:'함께 저녁 먹기',need:1,tip:'집에서 재료로 밥상을 차려요.'},
+ {id:'decorate',icon:'⭐',title:'추억 장식 달기',need:1,tip:'트리에 장식을 하나 달아요.'}
+];
+function releaseData(){
+ if(!state.release)state.release={xp:0,level:1,streak:0,memories:[],seen:false,daily:null};
+ if(!state.release.daily||state.release.daily.day!==state.day)state.release.daily={day:state.day,gather:0,talk:0,work:0,meal:0,decorate:0,claimed:{},all:false};
+ return state.release;
+}
+function releaseLevelName(l){return ['새싹 산책가','다정한 이웃','숲 생활 달인','추억 수집가','작은 숲의 친구'][Math.min(4,l-1)];}
+function releaseProgress(id,n=1){
+ const r=releaseData(),d=r.daily,t=RELEASE_TASKS.find(x=>x.id===id);if(!t)return;
+ d[id]=Math.min(t.need,(d[id]||0)+n);
+ if(d[id]>=t.need&&!d.claimed[id]){d.claimed[id]=true;r.xp+=25;state.money+=15;toast(t.title+' 완료! +15 도토리 · 추억 25');Snd.play('goal');}
+ if(!d.all&&RELEASE_TASKS.every(x=>(d[x.id]||0)>=x.need)){d.all=true;r.xp+=50;state.money+=50;r.streak++;toast('오늘의 생활 완성! +50 도토리 · 추억 50');Snd.play('fanfare');}
+ const nextLevel=1+Math.floor(r.xp/150);if(nextLevel>r.level){r.level=nextLevel;toast('생활 등급 상승! '+releaseLevelName(r.level));Snd.play('fanfare');}
+ save();updateReleaseHud();
+}
+function releaseDone(){const d=releaseData().daily;return RELEASE_TASKS.filter(t=>(d[t.id]||0)>=t.need).length;}
+function updateReleaseHud(){
+ if(!state?.started)return;const r=releaseData(),d=r.daily,done=releaseDone(),next=RELEASE_TASKS.find(t=>(d[t.id]||0)<t.need);
+ let b=document.querySelector('#release-ribbon');if(!b){b=document.createElement('button');b.id='release-ribbon';b.onclick=openReleaseBoard;document.body.appendChild(b);}
+ b.innerHTML='<span>'+(next?next.icon:'🌙')+'</span><div><small>오늘의 생활 '+done+'/5</small><b>'+(next?next.title:'하루를 마무리해요')+'</b></div><i>'+Math.min(100,Math.round((r.xp%150)/1.5))+'%</i>';
+ b.classList.toggle('complete',done===5);
+}
+function openReleaseBoard(){
+ const r=releaseData(),d=r.daily,done=releaseDone(),pct=Math.round((r.xp%150)/1.5);
+ const sh=openModal('<div class="release-head"><div><small>'+state.day+'일째 생활 수첩</small><h2>오늘의 작은 하루</h2><p>'+releaseLevelName(r.level)+' · 연속 '+r.streak+'일</p></div><div class="release-level"><b>Lv.'+r.level+'</b><span><i style="width:'+pct+'%"></i></span><small>다음 등급까지 '+(150-r.xp%150)+' 추억</small></div></div><div class="release-route"><span>아침 의뢰</span><i>›</i><span>재료 모으기</span><i>›</i><span>함께 식사</span><i>›</i><span>추억 남기기</span></div><div class="release-tasks">'+RELEASE_TASKS.map(t=>{const have=d[t.id]||0,ok=have>=t.need;return '<button class="release-task '+(ok?'done':'')+'" data-release="'+t.id+'"><em>'+t.icon+'</em><span><b>'+(ok?'완료 · ':'')+t.title+'</b><small>'+t.tip+'</small></span><strong>'+have+'/'+t.need+'</strong></button>';}).join('')+'</div><div class="release-reward '+(d.all?'earned':'')+'"><span>🎁</span><div><b>'+ (d.all?'오늘의 생활 선물 받음':'다섯 가지를 마치면 생활 선물')+'</b><small>도토리 50 · 추억 50 · 연속 기록</small></div></div><div class="chi-actions"><button class="btn pink" id="release-finish">'+(done>=3||state.min>=17*60?'오늘을 마무리하기':'조금 더 산책하기')+'</button><button class="btn ghost" data-close>마을로 돌아가기</button></div>');
+ sh.querySelectorAll('[data-release]').forEach(b=>b.onclick=()=>{const id=b.dataset.release;if(id==='work')openChiJobs();else if(id==='meal')openHouse();else if(id==='decorate')openChiTree();else{closeModal();toast(id==='talk'?'친구에게 다가가 대화해 봐요.':'나무·연못·바닷가에서 재료를 찾아봐요.');}});
+ sh.querySelector('#release-finish').onclick=()=>openDayRecap();
+}
+function openDayRecap(){
+ const r=releaseData(),done=releaseDone(),d=r.daily;
+ const highlights=RELEASE_TASKS.filter(t=>(d[t.id]||0)>=t.need).map(t=>t.icon+' '+t.title);
+ const sh=openModal('<div class="day-recap"><div class="recap-moon">☾</div><small>'+state.day+'일째 밤</small><h2>오늘도 잘 보냈어</h2><p>'+(highlights.length?highlights.join(' · '):'천천히 마을을 걸어 본 하루')+'</p><div class="recap-stats"><span><b>'+done+'</b><small>생활 목표</small></span><span><b>'+state.money+'</b><small>도토리</small></span><span><b>'+Object.values(state.friends).filter(v=>v>0).length+'</b><small>친해진 친구</small></span></div><p class="chi-line">'+(done===5?'친구들과 보낸 오늘이 반짝이는 추억으로 남았어요.':done>=3?'하고 싶은 일을 충분히 즐긴 포근한 하루였어요.':'쉬어 가는 날도 작은 숲의 소중한 하루예요.')+'</p><div class="chi-actions"><button class="btn pink" id="recap-sleep">추억을 저장하고 잠들기</button><button class="btn ghost" id="recap-back">조금 더 둘러보기</button></div></div>');
+ sh.querySelector('#recap-back').onclick=openReleaseBoard;
+ sh.querySelector('#recap-sleep').onclick=()=>{r.memories.unshift({day:state.day,done,highlights,time:state.min});r.memories=r.memories.slice(0,20);closeModal(true);Snd.play('sleep');startWipe('#2b2f5e',()=>sleepNight(false),.9);};
+}
+const releaseGoal=goal;goal=function(id,n=1){releaseGoal(id,n);if(id==='talk')releaseProgress('talk',n);else if(id==='work')releaseProgress('work',n);else if(id==='shake'||id==='fish')releaseProgress('gather',n);};
+const releaseShowGame=showGame;showGame=function(){releaseShowGame();updateReleaseHud();const r=releaseData();if(!r.seen){r.seen=true;setTimeout(()=>{toast('오늘의 생활 수첩이 열렸어요. 화면 위 목표를 눌러 보세요!');updateReleaseHud();save();},700);}};
+const releaseUpdateHud=updateHud;updateHud=function(force){releaseUpdateHud(force);if(state?.started)updateReleaseHud();};
 
 /* ---------------- boot ---------------- */
 function start(data){
